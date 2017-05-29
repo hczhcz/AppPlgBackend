@@ -63,7 +63,7 @@ TODO
 
 TODO: captcha?
 
-Response:
+#### Response
 
 (none)
 
@@ -79,7 +79,7 @@ Verification code is sent via email or SMS.
 
 TODO: captcha?
 
-Response:
+#### Response
 
 (none)
 
@@ -103,7 +103,7 @@ Called after /user_new or /user_login.
 
 ### /user_get
 
-Request:
+#### Request
 
 | name    | type   |
 | ---     | ---    |
