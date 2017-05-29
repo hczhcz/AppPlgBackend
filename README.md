@@ -19,11 +19,11 @@ Uses JSON.
 | name  | type   |
 | ---   | ---    |
 | error | uint64 |
-| ...   | ...    |
+| data  | {...}  |
 
-If error == 0, “...” is normal response.
+If error == 0, data field is normal response.
 
-Else, “...” is error response corresponding to the error code.
+Else, data field is error information corresponding to the error code.
 
 ## Error Codes
 
