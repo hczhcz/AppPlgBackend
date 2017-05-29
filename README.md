@@ -1,6 +1,6 @@
-﻿# Backend Document
+# Public APIs
 
-## Public API
+## Basic Interface
 
 Base URL: “...”
 
@@ -25,24 +25,24 @@ If error == 0, “...” is normal response.
 
 Else, “...” is error response corresponding to the error code.
 
-#### Error Code Table
+## Error Codes
 
-001. Invalid session_id
+### 001 Invalid session_id
 
 | name       | type   |
 | ---        | ---    |
 | session_id | string |
 
-### Data Structures
+## Data Structures
 
-#### User
+### User
 
 | name        | type                        |
 | ---         | ---                         |
 | gender      | “male” / “female” / “other” |
 | description | string                      |
 
-#### Login
+### Login
 
 | name     | type          |
 | ---      | ---           |
@@ -51,15 +51,15 @@ Else, “...” is error response corresponding to the error code.
 
 Requires (email != null) xor (phone != null).
 
-#### Post
+### Post
 
 TODO
 
-### Interfaces
+## Commands
 
-#### /user_new
+### /user_new
 
-Request:
+#### Request
 
 | name  | type  |
 | ---   | ---   |
@@ -74,9 +74,9 @@ Response:
 
 Note: Verify user via email or SMS.
 
-#### /user_login
+### /user_login
 
-Request:
+#### Request
 
 | name  | type  |
 | ---   | ---   |
@@ -90,21 +90,21 @@ Response:
 
 Note: Verify user via email or SMS.
 
-#### /user_verify
+### /user_verify
 
-Request:
+#### Request
 
 | name | type   |
 | ---  | ---    |
 | code | string |
 
-Response:
+#### Response
 
 | name    | type   |
 | ---     | ---    |
 | user_id | string |
 
-#### /user_get
+### /user_get
 
 Request:
 
@@ -112,33 +112,33 @@ Request:
 | ---     | ---    |
 | user_id | uint64 |
 
-Response:
+#### Response
 
 | name | type        |
 | ---  | ---         |
 | user | User / null |
 
-#### /user_update
+### /user_update
 
-Request:
+#### Request
 
 | name | type |
 | ---  | ---  |
 | user | User |
 
-Response:
+#### Response
 
 (none)
 
-## Spec
+# Implementation Specifications
 
-### Dependencies
+## Dependencies
 
 * PostgreSQL (github.com/go-pg/pg)
 
-### Database Scheme
+## Database Schemes
 
-#### Common keys
+### Common keys
 
 | name        | type  |
 | ---         | ---   |
