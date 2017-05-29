@@ -40,6 +40,7 @@ Else, data field is error information corresponding to the error code.
 | name        | type                        |
 | ---         | ---                         |
 | gender      | “male” / “female” / “other” |
+| nickname    | string                      |
 | description | string                      |
 
 ### Login
@@ -140,7 +141,7 @@ Request:
 
 ### Common keys
 
-| name        | type  |
-| ---         | ---   |
-| create_time | int64 |
-| deleted     | bool  |
+| name        | type   |
+| ---         | ---    |
+| create_time | uint64 |
+| deleted     | bool   |
