@@ -8,11 +8,11 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/user_new", userNew)
-	http.HandleFunc("/user_login", userLogin)
-	http.HandleFunc("/user_verify", userVerify)
-	http.HandleFunc("/user_get", userGet)
-	http.HandleFunc("/user_update", userUpdate)
+	http.HandleFunc("/user_new", jsonHandler(userNew))
+	http.HandleFunc("/user_login", jsonHandler(userLogin))
+	http.HandleFunc("/user_verify", jsonHandler(userVerify))
+	http.HandleFunc("/user_get", jsonHandler(userGet))
+	http.HandleFunc("/user_update", jsonHandler(userUpdate))
 
 	err := http.ListenAndServe(":8000", nil)
 	if err != nil {
@@ -26,11 +26,13 @@ type response struct {
 }
 
 func newResponse(data interface{}) response {
+	if data == nil {
+		data = ActionInternalError{}
+	}
+
 	res := response{}
 
-	if data == nil {
-		res.Data = map[string]string{}
-	} else if d, ok := data.(Action); ok {
+	if d, ok := data.(Action); ok {
 		res.Action = d.Action()
 		res.Data = d
 	} else {
@@ -40,53 +42,61 @@ func newResponse(data interface{}) response {
 	return res
 }
 
-func userNew(w http.ResponseWriter, r *http.Request) {
+func jsonHandler(fn func([]byte) interface{}) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			return
+		}
+
+		defer r.Body.Close()
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		res, err := json.Marshal(newResponse(fn(body)))
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		_, err = w.Write(res)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
+}
+
+func userNew(body []byte) interface{} {
 	type request struct {
 		Login
 		User
 	}
 
-	defer r.Body.Close()
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
 	var req request
-	err = json.Unmarshal(body, &req)
+	err := json.Unmarshal(body, &req)
 	if err != nil {
 		log.Println(err)
-		return
+		return ActionInternalError{}
 	}
 
-	ret := NewUser(req.Login, req.User)
-
-	res, err := json.Marshal(newResponse(ret))
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	_, err = w.Write(res)
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	return NewUser(req.Login, req.User)
 }
 
-func userLogin(w http.ResponseWriter, r *http.Request) {
-
+func userLogin(body []byte) interface{} {
+	return nil
 }
 
-func userVerify(w http.ResponseWriter, r *http.Request) {
-
+func userVerify(body []byte) interface{} {
+	return nil
 }
 
-func userGet(w http.ResponseWriter, r *http.Request) {
-
+func userGet(body []byte) interface{} {
+	return nil
 }
 
-func userUpdate(w http.ResponseWriter, r *http.Request) {
-
+func userUpdate(body []byte) interface{} {
+	return nil
 }
