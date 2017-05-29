@@ -25,18 +25,18 @@ type response struct {
 	Data   interface{} `json:"data"`
 }
 
-func newResponse(action Action, data interface{}) response {
+func newResponse(data interface{}) response {
 	res := response{}
-	if action != nil {
-		res.Action = action.Action()
-		res.Data = action
+
+	if data == nil {
+		res.Data = map[string]string{}
+	} else if d, ok := data.(Action); ok {
+		res.Action = d.Action()
+		res.Data = d
 	} else {
-		if data != nil {
-			res.Data = data
-		} else {
-			res.Data = map[string]string{} // created an empty dict
-		}
+		res.Data = data
 	}
+
 	return res
 }
 
@@ -60,9 +60,9 @@ func userNew(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	a, ret := NewUser(req.Login, req.User)
+	ret := NewUser(req.Login, req.User)
 
-	res, err := json.Marshal(newResponse(a, ret))
+	res, err := json.Marshal(newResponse(ret))
 	if err != nil {
 		log.Println(err)
 		return

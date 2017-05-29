@@ -14,7 +14,7 @@ type User struct {
 	Description string `json:"description,omitempty"`
 }
 
-func NewUser(login Login, user User) (Action, interface{}) {
+func NewUser(login Login, user User) interface{} {
 	log.Println("Created user: ", login, user)
-	return nil, nil
+	return nil
 }
