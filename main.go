@@ -21,15 +21,23 @@ func main() {
 }
 
 type response struct {
-	Error uint64      `json:"error"`
-	Data  interface{} `json:"data"`
+	Action string      `json:"action"`
+	Data   interface{} `json:"data"`
 }
 
-func newResponse(code uint64, data interface{}) response {
-	if data == nil {
-		data = map[string]string{} // created an empty dict
+func newResponse(action Action, data interface{}) response {
+	res := response{}
+	if action != nil {
+		res.Action = action.Action()
+		res.Data = action
+	} else {
+		if data != nil {
+			res.Data = data
+		} else {
+			res.Data = map[string]string{} // created an empty dict
+		}
 	}
-	return response{code, data}
+	return res
 }
 
 func userNew(w http.ResponseWriter, r *http.Request) {
@@ -52,9 +60,9 @@ func userNew(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	code, ret := NewUser(req.Login, req.User)
+	a, ret := NewUser(req.Login, req.User)
 
-	res, err := json.Marshal(newResponse(code, ret))
+	res, err := json.Marshal(newResponse(a, ret))
 	if err != nil {
 		log.Println(err)
 		return
