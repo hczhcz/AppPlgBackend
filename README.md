@@ -23,7 +23,7 @@ Uses JSON.
 | action | string / null |
 | data   | {...}         |
 
-If action == 0, the data field is normal response.
+If action == null, the data field is normal response.
 
 Else, the corresponding action handler (typically an error handler) should be triggered, and the data field is the handler's required information.
 
