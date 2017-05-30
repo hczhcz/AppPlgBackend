@@ -16,15 +16,15 @@ type User struct {
 }
 
 func UserNew(login Login, user User) interface{} {
-	log.Println("Created user: ", login, user)
+	log.Println("Created user:", login, user)
 	return ActionOK{}
 }
 
 func UserLogin(login Login) interface{} {
 	if login.Email != "" {
-		log.Println("Sent mail to: ", login.Email)
+		log.Println("Sent mail to:", login.Email)
 	} else if login.Phone != "" {
-		log.Println("Sent sms to: ", login.Phone)
+		log.Println("Sent sms to:", login.Phone)
 	} else {
 		return ActionInvalidRequest{"The email and phone fields of Login are both empty."}
 	}
@@ -41,7 +41,7 @@ func UserVerify(userID uint64, code string) interface{} {
 }
 
 func UserGet(userID uint64) interface{} {
-	log.Println("Get user_id ", userID)
+	log.Println("Get user_id", userID)
 
 	return User{"test", "male", "Not human"}
 }
