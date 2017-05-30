@@ -48,7 +48,7 @@ func lookupUserIDBySessionID(sessionID string) string {
 }
 
 func getUserID(r *http.Request) string {
-	if cookieSessionID, err := r.Cookie("session_id"); err != nil {
+	if cookieSessionID, err := r.Cookie("session_id"); err == nil {
 		if userID := lookupUserIDBySessionID(cookieSessionID.Value); userID != "" {
 			return userID
 		}
