@@ -14,7 +14,18 @@ type User struct {
 	Description string `json:"description,omitempty"`
 }
 
-func NewUser(login Login, user User) interface{} {
+func UserNew(login Login, user User) interface{} {
 	log.Println("Created user: ", login, user)
-	return nil
+	return ActionOK{}
+}
+
+func UserLogin(login Login) interface{} {
+	if login.Email != "" {
+		log.Println("Sent mail to: ", login.Email)
+	} else if login.Phone != "" {
+		log.Println("Sent sms to: ", login.Phone)
+	} else {
+		return ActionInternalError{}
+	}
+	return ActionOK{}
 }

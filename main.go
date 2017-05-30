@@ -82,11 +82,22 @@ func userNew(body []byte) interface{} {
 		return ActionInternalError{}
 	}
 
-	return NewUser(req.Login, req.User)
+	return UserNew(req.Login, req.User)
 }
 
 func userLogin(body []byte) interface{} {
-	return nil
+	type request struct {
+		Login
+	}
+
+	var req request
+	err := json.Unmarshal(body, &req)
+	if err != nil {
+		log.Println(err)
+		return ActionInternalError{}
+	}
+
+	return UserLogin(req.Login)
 }
 
 func userVerify(body []byte) interface{} {
