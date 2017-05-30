@@ -1,31 +1,24 @@
 package main
 
-// ActionOK represents success status.
-type ActionOK struct{}
+func actionSessionInit() (string, interface{}) {
+    type response struct {
+        SessionID string `json:"session_id"`
+    }
 
-type Action interface {
-	Action() string
+    return "session_init", response{"0000"} // TODO: mock
 }
 
-type ActionSessionInit struct {
-	SessionID string `json:"session_id"`
+func actionInvalidRequest(hint string) (string, interface{}) {
+    type response struct {
+        Hint string `json:"hint"`
+    }
+
+    return "invalid_request", response{hint}
 }
 
-func (a ActionSessionInit) Action() string {
-	return "session_init"
-}
+func actionInternalError() (string, interface{}) {
+    type response struct {
+    }
 
-type ActionInvalidRequest struct {
-	Hint string `json:"hint"`
-}
-
-func (a ActionInvalidRequest) Action() string {
-	return "invalid_request"
-}
-
-type ActionInternalError struct {
-}
-
-func (a ActionInternalError) Action() string {
-	return "internal_error"
+    return "internal_error", response{}
 }

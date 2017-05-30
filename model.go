@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"fmt"
 )
 
 type Login struct {
@@ -15,33 +16,30 @@ type User struct {
 	Description string `json:"description,omitempty"`
 }
 
-func UserNew(login Login, user User) interface{} {
+func UserNew(login Login, user User) {
 	log.Println("Created user:", login, user)
-	return ActionOK{}
 }
 
-func UserLogin(login Login) interface{} {
+func UserLogin(login Login) error {
 	if login.Email != "" {
 		log.Println("Sent mail to:", login.Email)
 	} else if login.Phone != "" {
 		log.Println("Sent sms to:", login.Phone)
 	} else {
-		return ActionInvalidRequest{"The email and phone fields of Login are both empty."}
+		return fmt.Errorf("") // TODO
 	}
-	return ActionOK{}
+
+	return nil
 }
 
-func UserVerify(userID uint64, code string) interface{} {
-	log.Printf("Verify code %s for user_id %d\n", code, userID)
+func UserVerify(sessionID string, code string) (uint64, error) {
+	log.Printf("Verify code %s for session %s\n", code, sessionID)
 
-	type response struct {
-		UserID uint64 `json:"user_id"`
-	}
-	return response{userID}
+	return 1234, nil // TODO: mock
 }
 
-func UserGet(userID uint64) interface{} {
+func UserGet(userID uint64) (User, error) {
 	log.Println("Get user_id", userID)
 
-	return User{"test", "male", "Not human"}
+	return User{"test", "male", "Not human"}, nil
 }
