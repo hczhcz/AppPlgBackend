@@ -130,8 +130,18 @@ func userVerify(userID uint64, body []byte) interface{} {
 	return UserVerify(userID, req.Code)
 }
 
-func userGet(userID uint64, body []byte) interface{} {
-	return nil
+func userGet(_ uint64, body []byte) interface{} {
+	type request struct {
+		UserID uint64 `json:"user_id"`
+	}
+
+	var req request
+	if err := json.Unmarshal(body, &req); err != nil {
+		log.Println(err)
+		return ActionInvalidRequest{"Invalid user_get request"}
+	}
+
+	return UserGet(req.UserID)
 }
 
 func userUpdate(userID uint64, body []byte) interface{} {

@@ -39,3 +39,9 @@ func UserVerify(userID uint64, code string) interface{} {
 	}
 	return response{userID}
 }
+
+func UserGet(userID uint64) interface{} {
+	log.Println("Get user_id ", userID)
+
+	return User{"test", "male", "Not human"}
+}
