@@ -95,11 +95,8 @@ func userNew(sessionID string, data json.RawMessage) (string, interface{}) {
 		return actionInvalidRequest("Invalid user_new request")
 	}
 
-	if req.Login.Email == "" && req.Login.Phone == "" {
-		return actionInvalidRequest("The email and phone fields of Login are both empty.")
-	}
-	if req.Login.Email != "" && req.Login.Phone != "" {
-		return actionInvalidRequest("Can not determine email or phone is used in Login.")
+	if err := req.Login.IsValid(); err != nil {
+		return actionInvalidRequest(err.Error())
 	}
 
 	if err := UserNew(req.Login, req.User); err != nil {
@@ -123,11 +120,8 @@ func userLogin(sessionID string, data json.RawMessage) (string, interface{}) {
 		return actionInvalidRequest("Invalid user_login request")
 	}
 
-	if req.Login.Email == "" && req.Login.Phone == "" {
-		return actionInvalidRequest("The email and phone fields of Login are both empty.")
-	}
-	if req.Login.Email != "" && req.Login.Phone != "" {
-		return actionInvalidRequest("Can not determine email or phone is used in Login.")
+	if err := req.Login.IsValid(); err != nil {
+		return actionInvalidRequest(err.Error())
 	}
 
 	if err := UserLogin(req.Login); err != nil {

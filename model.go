@@ -1,12 +1,25 @@
 package main
 
 import (
+	"fmt"
 	"log"
 )
 
 type Login struct {
 	Email string `json:"email,omitempty"`
 	Phone string `json:"phone,omitempty"`
+}
+
+func (l Login) IsValid() error {
+	if l.Email == "" && l.Phone == "" {
+		return fmt.Errorf("The email and phone fields of Login are both empty.")
+	}
+
+	if l.Email != "" && l.Phone != "" {
+		return fmt.Errorf("Can not determine email or phone is used in Login.")
+	}
+
+	return nil
 }
 
 type User struct {
