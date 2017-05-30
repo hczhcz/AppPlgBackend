@@ -101,7 +101,12 @@ func userNew(sessionID string, data json.RawMessage) (string, interface{}) {
 
 	if err := UserNew(req.Login, req.User); err != nil {
 		log.Println(err)
-		return actionInvalidRequest("???.") // TODO
+		switch err.(type) { // TODO
+		case *ErrorDuplicatedEmail:
+			return actionDuplicatedEmail() // TODO
+		default:
+			return actionInvalidRequest("???.") // TODO
+		}
 	}
 
 	return "", response{}

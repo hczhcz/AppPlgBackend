@@ -22,3 +22,10 @@ func actionInternalError() (string, interface{}) {
 
 	return "internal_error", response{}
 }
+
+func actionDuplicatedEmail() (string, interface{}) { // TODO: ONLY for testing
+	type response struct {
+	}
+
+	return "duplicated_email", response{}
+}
