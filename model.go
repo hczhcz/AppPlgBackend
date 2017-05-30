@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -16,17 +15,29 @@ type User struct {
 	Description string `json:"description,omitempty"`
 }
 
-func UserNew(login Login, user User) {
-	log.Println("Created user:", login, user)
-}
+func UserNew(login Login, user User) error {
+	log.Println("Create user:", login, user)
 
-func UserLogin(login Login) error {
 	if login.Email != "" {
 		log.Println("Sent mail to:", login.Email)
 	} else if login.Phone != "" {
 		log.Println("Sent sms to:", login.Phone)
 	} else {
-		return fmt.Errorf("") // TODO
+		// Never reach
+	}
+
+	return nil
+}
+
+func UserLogin(login Login) error {
+	log.Println("Login:", login)
+
+	if login.Email != "" {
+		log.Println("Sent mail to:", login.Email)
+	} else if login.Phone != "" {
+		log.Println("Sent sms to:", login.Phone)
+	} else {
+		// Never reach
 	}
 
 	return nil
