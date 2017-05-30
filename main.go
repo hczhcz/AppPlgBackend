@@ -8,11 +8,11 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/user_new", jsonHandler(userNew))
-	http.HandleFunc("/user_login", jsonHandler(userLogin))
-	http.HandleFunc("/user_verify", jsonHandler(userVerify))
-	http.HandleFunc("/user_get", jsonHandler(userGet))
-	http.HandleFunc("/user_update", jsonHandler(userUpdate))
+	http.HandleFunc("/user_new", jsonHandler(userNew, true))
+	http.HandleFunc("/user_login", jsonHandler(userLogin, true))
+	http.HandleFunc("/user_verify", jsonHandler(userVerify, false))
+	http.HandleFunc("/user_get", jsonHandler(userGet, false))
+	http.HandleFunc("/user_update", jsonHandler(userUpdate, false))
 
 	err := http.ListenAndServe(":8000", nil)
 	if err != nil {
@@ -43,9 +43,27 @@ func newResponse(data interface{}) response {
 	return res
 }
 
-func jsonHandler(fn func([]byte) interface{}) http.HandlerFunc {
+func lookupUserIDBySessionID(sessionID string) string {
+	return "laurence"
+}
+
+func getUserID(r *http.Request) string {
+	if cookieSessionID, err := r.Cookie("session_id"); err != nil {
+		if userID := lookupUserIDBySessionID(cookieSessionID.Value); userID != "" {
+			return userID
+		}
+	}
+	return ""
+}
+
+func jsonHandler(fn func([]byte) interface{}, acceptInvalidSessionID bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
+			return
+		}
+
+		userID := getUserID(r)
+		if userID == "" && !acceptInvalidSessionID {
 			return
 		}
 
