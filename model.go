@@ -29,3 +29,7 @@ func UserLogin(login Login) interface{} {
 	}
 	return ActionOK{}
 }
+
+func UserVerify(code string) interface{} {
+	return nil
+}

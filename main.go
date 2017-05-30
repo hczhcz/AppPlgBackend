@@ -26,6 +26,7 @@ type response struct {
 }
 
 func newResponse(data interface{}) response {
+	// data should not be nil
 	if data == nil {
 		data = ActionInternalError{}
 	}
@@ -76,8 +77,7 @@ func userNew(body []byte) interface{} {
 	}
 
 	var req request
-	err := json.Unmarshal(body, &req)
-	if err != nil {
+	if err := json.Unmarshal(body, &req); err != nil {
 		log.Println(err)
 		return ActionInternalError{}
 	}
@@ -91,8 +91,7 @@ func userLogin(body []byte) interface{} {
 	}
 
 	var req request
-	err := json.Unmarshal(body, &req)
-	if err != nil {
+	if err := json.Unmarshal(body, &req); err != nil {
 		log.Println(err)
 		return ActionInternalError{}
 	}
@@ -101,6 +100,16 @@ func userLogin(body []byte) interface{} {
 }
 
 func userVerify(body []byte) interface{} {
+	type request struct {
+		Code string `json:"code"`
+	}
+
+	var req request
+	if err := json.Unmarshal(body, &req); err != nil {
+		log.Println(err)
+		return ActionInternalError{}
+	}
+
 	return nil
 }
 
