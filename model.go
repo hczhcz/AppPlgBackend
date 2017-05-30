@@ -31,11 +31,11 @@ func UserLogin(login Login) interface{} {
 	return ActionOK{}
 }
 
-func UserVerify(userID string, code string) interface{} {
-	log.Printf("Verify code %s for user_id %s\n", code, userID)
+func UserVerify(userID uint64, code string) interface{} {
+	log.Printf("Verify code %s for user_id %d\n", code, userID)
 
 	type response struct {
-		UserID string `json:"user_id"`
+		UserID uint64 `json:"user_id"`
 	}
 	return response{userID}
 }

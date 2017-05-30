@@ -43,27 +43,26 @@ func newResponse(data interface{}) response {
 	return res
 }
 
-func lookupUserIDBySessionID(sessionID string) string {
-	return "laurence"
+func lookupUserIDBySessionID(sessionID string) uint64 {
+	return 1000
 }
 
-func getUserID(r *http.Request) string {
+func getUserID(r *http.Request) uint64 {
 	if cookieSessionID, err := r.Cookie("session_id"); err == nil {
-		if userID := lookupUserIDBySessionID(cookieSessionID.Value); userID != "" {
-			return userID
-		}
+		return lookupUserIDBySessionID(cookieSessionID.Value)
+	} else {
+		return 0
 	}
-	return ""
 }
 
-func jsonHandler(fn func(string, []byte) interface{}, acceptInvalidSessionID bool) http.HandlerFunc {
+func jsonHandler(fn func(uint64, []byte) interface{}, acceptInvalidSessionID bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			return
 		}
 
 		userID := getUserID(r)
-		if userID == "" && !acceptInvalidSessionID {
+		if userID == 0 && !acceptInvalidSessionID {
 			return
 		}
 
@@ -88,7 +87,7 @@ func jsonHandler(fn func(string, []byte) interface{}, acceptInvalidSessionID boo
 	}
 }
 
-func userNew(_ string, body []byte) interface{} {
+func userNew(_ uint64, body []byte) interface{} {
 	type request struct {
 		Login
 		User
@@ -103,7 +102,7 @@ func userNew(_ string, body []byte) interface{} {
 	return UserNew(req.Login, req.User)
 }
 
-func userLogin(_ string, body []byte) interface{} {
+func userLogin(_ uint64, body []byte) interface{} {
 	type request struct {
 		Login
 	}
@@ -117,7 +116,7 @@ func userLogin(_ string, body []byte) interface{} {
 	return UserLogin(req.Login)
 }
 
-func userVerify(userID string, body []byte) interface{} {
+func userVerify(userID uint64, body []byte) interface{} {
 	type request struct {
 		Code string `json:"code"`
 	}
@@ -131,10 +130,10 @@ func userVerify(userID string, body []byte) interface{} {
 	return UserVerify(userID, req.Code)
 }
 
-func userGet(userID string, body []byte) interface{} {
+func userGet(userID uint64, body []byte) interface{} {
 	return nil
 }
 
-func userUpdate(userID string, body []byte) interface{} {
+func userUpdate(userID uint64, body []byte) interface{} {
 	return nil
 }
