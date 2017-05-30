@@ -147,6 +147,22 @@ Triggered when the current session is null or invalid.
 
 The client should reassign the session_id.
 
+### invalid_request
+
+| name | type   |
+| ---  | ---    |
+| hint | string |
+
+Triggered when the format of the request is invalid.
+
+Hint gives some information.
+
+The user input or client code should be checked.
+
+### internal_error
+
+Triggered when something unexpected happened.
+
 # Implementation Specifications
 
 ## Dependencies

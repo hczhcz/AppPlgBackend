@@ -15,6 +15,14 @@ func (a ActionSessionInit) Action() string {
 	return "session_init"
 }
 
+type ActionInvalidRequest struct {
+	Hint string `json:"hint"`
+}
+
+func (a ActionInvalidRequest) Action() string {
+	return "invalid_request"
+}
+
 type ActionInternalError struct {
 }
 

@@ -25,7 +25,7 @@ func UserLogin(login Login) interface{} {
 	} else if login.Phone != "" {
 		log.Println("Sent sms to: ", login.Phone)
 	} else {
-		return ActionInternalError{}
+		return ActionInvalidRequest{"The email and phone fields of Login are both empty."}
 	}
 	return ActionOK{}
 }
