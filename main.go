@@ -97,7 +97,7 @@ func userNew(_ string, body []byte) interface{} {
 	var req request
 	if err := json.Unmarshal(body, &req); err != nil {
 		log.Println(err)
-		return ActionInternalError{}
+		return ActionInvalidRequest{"Invalid user_new request"}
 	}
 
 	return UserNew(req.Login, req.User)
@@ -111,7 +111,7 @@ func userLogin(_ string, body []byte) interface{} {
 	var req request
 	if err := json.Unmarshal(body, &req); err != nil {
 		log.Println(err)
-		return ActionInternalError{}
+		return ActionInvalidRequest{"Invalid user_login request"}
 	}
 
 	return UserLogin(req.Login)
@@ -125,7 +125,7 @@ func userVerify(userID string, body []byte) interface{} {
 	var req request
 	if err := json.Unmarshal(body, &req); err != nil {
 		log.Println(err)
-		return ActionInternalError{}
+		return ActionInvalidRequest{"Invalid user_verify request"}
 	}
 
 	return UserVerify(userID, req.Code)
