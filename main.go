@@ -56,7 +56,7 @@ func getUserID(r *http.Request) string {
 	return ""
 }
 
-func jsonHandler(fn func([]byte) interface{}, acceptInvalidSessionID bool) http.HandlerFunc {
+func jsonHandler(fn func(string, []byte) interface{}, acceptInvalidSessionID bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			return
@@ -74,7 +74,7 @@ func jsonHandler(fn func([]byte) interface{}, acceptInvalidSessionID bool) http.
 			return
 		}
 
-		res, err := json.Marshal(newResponse(fn(body)))
+		res, err := json.Marshal(newResponse(fn(userID, body)))
 		if err != nil {
 			log.Println(err)
 			return
@@ -88,7 +88,7 @@ func jsonHandler(fn func([]byte) interface{}, acceptInvalidSessionID bool) http.
 	}
 }
 
-func userNew(body []byte) interface{} {
+func userNew(_ string, body []byte) interface{} {
 	type request struct {
 		Login
 		User
@@ -103,7 +103,7 @@ func userNew(body []byte) interface{} {
 	return UserNew(req.Login, req.User)
 }
 
-func userLogin(body []byte) interface{} {
+func userLogin(_ string, body []byte) interface{} {
 	type request struct {
 		Login
 	}
@@ -117,7 +117,7 @@ func userLogin(body []byte) interface{} {
 	return UserLogin(req.Login)
 }
 
-func userVerify(body []byte) interface{} {
+func userVerify(userID string, body []byte) interface{} {
 	type request struct {
 		Code string `json:"code"`
 	}
@@ -128,13 +128,13 @@ func userVerify(body []byte) interface{} {
 		return ActionInternalError{}
 	}
 
+	return UserVerify(userID, req.Code)
+}
+
+func userGet(userID string, body []byte) interface{} {
 	return nil
 }
 
-func userGet(body []byte) interface{} {
-	return nil
-}
-
-func userUpdate(body []byte) interface{} {
+func userUpdate(userID string, body []byte) interface{} {
 	return nil
 }

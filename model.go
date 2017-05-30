@@ -30,6 +30,11 @@ func UserLogin(login Login) interface{} {
 	return ActionOK{}
 }
 
-func UserVerify(code string) interface{} {
-	return nil
+func UserVerify(userID string, code string) interface{} {
+	log.Printf("Verify code %s for user_id %s\n", code, userID)
+
+	type response struct {
+		UserID string `json:"user_id"`
+	}
+	return response{userID}
 }
