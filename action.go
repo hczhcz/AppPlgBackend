@@ -29,3 +29,19 @@ func actionDuplicatedEmail() (string, interface{}) { // TODO: ONLY for testing
 
 	return "duplicated_email", response{}
 }
+
+type Action interface {
+	Action() (string, interface{})
+}
+
+func (e ErrorDuplicatedEmail) Action() (string, interface{}) {
+	return actionDuplicatedEmail()
+}
+
+func GetActionFromError(e error) (string, interface{}) {
+	if a, ok := e.(Action); ok {
+		return a.Action()
+	} else {
+		return actionInternalError()
+	}
+}
