@@ -50,7 +50,7 @@ func userLogin(sessionID string, data json.RawMessage) (string, interface{}) {
 
 	if err := UserLogin(req.Login); err != nil {
 		log.Println(err)
-		return actionInvalidRequest("???.") // TODO
+		return GetActionFromError(err)
 	}
 
 	return "", response{}
@@ -73,7 +73,7 @@ func userVerify(sessionID string, data json.RawMessage) (string, interface{}) {
 	userID, err := UserVerify(sessionID, req.Code)
 	if err != nil {
 		log.Println(err)
-		return actionInvalidRequest("???.") // TODO
+		return GetActionFromError(err)
 	}
 
 	return "", response{userID}
@@ -96,7 +96,7 @@ func userGet(sessionID string, data json.RawMessage) (string, interface{}) {
 	user, err := UserGet(req.UserID)
 	if err != nil {
 		log.Println(err)
-		return actionInvalidRequest("???.") // TODO
+		return GetActionFromError(err)
 	}
 
 	return "", response{user}
